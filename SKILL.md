@@ -1,6 +1,6 @@
 ---
 name: skidl
-description: "Design electronic circuits using the SKiDL Python library. Use when the user asks to: (1) create or describe electronic circuits in Python code, (2) generate netlists, PCB layouts, or schematics programmatically, (3) use SKiDL APIs (Part, Net, Bus, Pin, Circuit, SubCircuit), (4) run SPICE simulations with SKiDL/PySpice, (5) search for electronic components in KiCad libraries, (6) convert KiCad schematics to Python code, or (7) any task involving programmatic EDA/circuit design with Python."
+description: "Design electronic circuits using the SKiDL Python library. Use when the user asks to: (1) create or describe electronic circuits in Python code, (2) generate netlists, PCB layouts, or schematics programmatically, (3) use SKiDL APIs (Part, Net, Bus, Pin, Circuit, SubCircuit), (4) run SPICE simulations with SKiDL/PySpice, (5) search for electronic components in KiCad libraries or online (Octopart, Digi-Key, Mouser, LCSC, SnapEDA), (6) convert KiCad schematics to Python code, (7) generate BOMs or find component pricing/sourcing, or (8) any task involving programmatic EDA/circuit design with Python."
 ---
 
 # SKiDL — Programmatic Electronic Circuit Design
@@ -60,14 +60,19 @@ inp & tee(c & gnd) & l & tee(c2 & gnd) & outp  # Tee junctions
 
 ## Finding Parts
 
+SKiDL searches **local KiCad libraries only**. For online component search, sourcing, and downloading missing parts, see [component_search.md](references/component_search.md).
+
 ```bash
 $ skidl-part-search opamp           # Command line
 $ skidl-part-search --interactive   # Interactive mode
 ```
 
 ```python
-search('opamp')                     # In code
+search('opamp')                     # In code (regex across names/descriptions/keywords)
+search('opamp dual')                # AND logic
+search('lm358 | tl072')            # OR logic
 search_footprints('QFP')
+show(Part('Amplifier_Operational', 'LM358'))  # Display part details
 ```
 
 ## Instantiating & Copying Parts
@@ -228,3 +233,4 @@ analysis = sim.operating_point()
 - **Full API**: See [api_reference.md](references/api_reference.md) for all classes, methods, properties, and enums
 - **SPICE guide**: See [spice_guide.md](references/spice_guide.md) for simulation setup, available parts, and examples
 - **Examples**: See [examples.md](references/examples.md) for complete working circuits (LED, op-amp, 555 timer, bus interfaces, hierarchy, parametric designs)
+- **Component search & sourcing**: See [component_search.md](references/component_search.md) for online part search, distributor APIs (Octopart, Digi-Key, Mouser), symbol/footprint downloads (SnapEDA, Ultra Librarian), LCSC/JLCPCB workflow, and BOM pricing
